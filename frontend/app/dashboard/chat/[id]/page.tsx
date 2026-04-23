@@ -31,7 +31,7 @@ export default function ChatPage() {
     setError('')
 
     try {
-      const res = await fetch('http://localhost:5000/api/chat/send', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ botId: id, sessionId: sessionId.current, message: input })

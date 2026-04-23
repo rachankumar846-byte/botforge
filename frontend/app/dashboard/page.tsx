@@ -26,7 +26,7 @@ export default function Dashboard() {
   }, [])
 
   async function fetchBots() {
-    const res = await fetch('http://localhost:5000/api/bots', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bots`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
@@ -36,7 +36,7 @@ export default function Dashboard() {
 
   async function createBot() {
     if (!newBotName.trim()) return
-    const res = await fetch('http://localhost:5000/api/bots', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bots`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: newBotName })
@@ -47,7 +47,7 @@ export default function Dashboard() {
   }
 
   async function saveBot(botId: string) {
-    const res = await fetch(`http://localhost:5000/api/bots/${botId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bots/${botId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(editForm)
@@ -128,11 +128,11 @@ export default function Dashboard() {
                 {/* Widget script */}
                 <div className="bg-gray-800 rounded-lg p-3 mb-3 flex items-center justify-between gap-2">
                   <code className="text-xs text-purple-300 truncate">
-                    {`<script src="http://localhost:5000/widget/${bot.id}"></script>`}
+                    {`<script src="${process.env.NEXT_PUBLIC_API_URL}/widget/${bot.id}"></script>`}
                   </code>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(`<script src="http://localhost:5000/widget/${bot.id}"></script>`)
+                      navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_API_URL}/widget/${bot.id}"></script>`)
                       alert('Copied to clipboard!')
                     }}
                     className="text-xs bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded whitespace-nowrap"

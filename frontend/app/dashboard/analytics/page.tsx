@@ -21,7 +21,7 @@ export default function AnalyticsPage() {
   }, [])
 
   async function fetchAnalytics() {
-    const res = await fetch('http://localhost:5000/api/analytics', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analytics`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     const json = await res.json()

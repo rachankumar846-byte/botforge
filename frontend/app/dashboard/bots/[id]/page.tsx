@@ -19,7 +19,7 @@ export default function BotPage() {
   useEffect(() => { fetchDocs() }, [])
 
   async function fetchDocs() {
-    const res = await fetch(`http://localhost:5000/api/knowledge/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/knowledge/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
@@ -36,7 +36,7 @@ export default function BotPage() {
     formData.append('file', file)
     formData.append('botId', id as string)
 
-    const res = await fetch('http://localhost:5000/api/knowledge/upload', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/knowledge/upload`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: formData
@@ -53,7 +53,7 @@ export default function BotPage() {
   }
 
   async function deleteDoc(docId: string) {
-    await fetch(`http://localhost:5000/api/knowledge/${docId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/knowledge/${docId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })
