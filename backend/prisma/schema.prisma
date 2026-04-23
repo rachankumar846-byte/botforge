@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  plan      String   @default("free")
+  createdAt DateTime @default(now())
+  users     User[]
+  bots      Bot[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("owner")
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model Bot {
+  id            String         @id @default(uuid())
+  tenantId      String
+  tenant        Tenant         @relation(fields: [tenantId], references: [id])
+  name          String
+  systemPrompt  String         @default("You are a helpful assistant.")
+  widgetColor   String         @default("#7F77DD")
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  knowledgeDocs KnowledgeDoc[]
+  conversations Conversation[]
+}
+
+model KnowledgeDoc {
+  id         String   @id @default(uuid())
+  botId      String
+  bot        Bot      @relation(fields: [botId], references: [id])
+  filename   String
+  content    String
+  uploadedAt DateTime @default(now())
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  botId     String
+  bot       Bot      @relation(fields: [botId], references: [id])
+  sessionId String
+  messages  Json     @default("[]")
+  startedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
