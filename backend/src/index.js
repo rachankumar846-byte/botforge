@@ -29,6 +29,20 @@ app.use('/api/knowledge', knowledgeRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/widget', widgetRoutes)
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server running on port ${process.env.PORT || 5000}`)
+// Health check route
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' })
+})
+
+const PORT = process.env.PORT || 5000
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+
+  // Keep alive ping every 14 minutes to prevent Render free tier sleep
+  setInterval(() => {
+    fetch(`https://botforge-2k2q.onrender.com/health`)
+      .then(() => console.log('Keep alive ping sent'))
+      .catch(() => console.log('Keep alive ping failed'))
+  }, 14 * 60 * 1000)
 })
